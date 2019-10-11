@@ -28,20 +28,22 @@
  */
 package net.md_5.specialsource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
 import net.md_5.specialsource.repo.ClassRepo;
 import net.md_5.specialsource.repo.JarRepo;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
-import static org.objectweb.asm.ClassWriter.*;
+
+import java.io.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+
+import static org.objectweb.asm.ClassWriter.COMPUTE_MAXS;
 
 public class JarRemapper extends CustomRemapper {
 
@@ -264,10 +266,11 @@ public class JarRemapper extends CustomRemapper {
                 reader = new ClassReader(pre);
             }
         }
-
         ClassNode node = new ClassNode();
-        RemappingClassAdapter mapper = new RemappingClassAdapter(node, this, repo);
-        reader.accept(mapper, readerFlags);
+        ClassVisitor ca = node;
+        ca = new RemappingClassAdapter(ca, this, repo);
+        ca = new ParameterAnnotationFixer(ca);
+        reader.accept(ca, readerFlags);
 
         ClassWriter wr = new ClassWriter(writerFlags);
         node.accept(wr);
