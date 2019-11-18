@@ -40,3 +40,5 @@
 *.rg
 *.srg
 *.txt
+
+/.gradle
