@@ -107,7 +107,7 @@ public class ParameterAnnotationFixer extends ClassVisitor {
         // Check for enum
         // http://hg.openjdk.java.net/jdk8/jdk8/langtools/file/1ff9d5118aae/src/share/classes/com/sun/tools/javac/comp/Lower.java#l2866
         if ((cls.access & ACC_ENUM) != 0) {
-            if (SpecialSource.verbose()) LOGGER.fine("  Considering " + cls.name + " for extra parameter annotations as it is an enum");
+            //if (SpecialSource.verbose()) LOGGER.fine("  Considering " + cls.name + " for extra parameter annotations as it is an enum");
             return new Type[] { Type.getObjectType("java/lang/String"), Type.INT_TYPE };
         }
         // Check for inner class
@@ -120,19 +120,19 @@ public class ParameterAnnotationFixer extends ClassVisitor {
         }
         // http://hg.openjdk.java.net/jdk8/jdk8/langtools/file/1ff9d5118aae/src/share/classes/com/sun/tools/javac/code/Symbol.java#l398
         if (info == null) {
-            if (SpecialSource.verbose()) LOGGER.fine("  Not considering " + cls.name + " for extra parameter annotations as it is not an inner class");
+            //if (SpecialSource.verbose()) LOGGER.fine("  Not considering " + cls.name + " for extra parameter annotations as it is not an inner class");
             return null; // It's not an inner class
         }
         if ((info.access & (ACC_STATIC | ACC_INTERFACE)) != 0) {
-            if (SpecialSource.verbose()) LOGGER.fine("  Not considering " + cls.name + " for extra parameter annotations as is an interface or static");
+            //if (SpecialSource.verbose()) LOGGER.fine("  Not considering " + cls.name + " for extra parameter annotations as is an interface or static");
             return null; // It's static or can't have a constructor
         }
         // http://hg.openjdk.java.net/jdk8/jdk8/langtools/file/1ff9d5118aae/src/share/classes/com/sun/tools/javac/jvm/ClassReader.java#l2011
         if (info.innerName == null) {
-            if (SpecialSource.verbose()) LOGGER.fine("  Not considering " + cls.name + " for extra parameter annotations as it is annonymous");
+            //if (SpecialSource.verbose()) LOGGER.fine("  Not considering " + cls.name + " for extra parameter annotations as it is annonymous");
             return null; // It's an anonymous class
         }
-        if (SpecialSource.verbose()) LOGGER.fine("  Considering " + cls.name + " for extra parameter annotations as it is an inner class of " + info.outerName);
+        //if (SpecialSource.verbose()) LOGGER.fine("  Considering " + cls.name + " for extra parameter annotations as it is an inner class of " + info.outerName);
         return new Type[] { Type.getObjectType(info.outerName) };
     }
 
@@ -195,14 +195,14 @@ public class ParameterAnnotationFixer extends ClassVisitor {
         }
         int numAnnotations = annotations.length;
         if (numParams == numAnnotations) {
-            if (SpecialSource.verbose()) LOGGER.info("Found extra " + attributeName + " entries in " + methodInfo + ": removing " + numSynthetic);
+            //if (SpecialSource.verbose()) LOGGER.info("Found extra " + attributeName + " entries in " + methodInfo + ": removing " + numSynthetic);
             return Arrays.copyOfRange(annotations, numSynthetic, numAnnotations);
         }
         else if (numParams == numAnnotations - numSynthetic) {
-            if (SpecialSource.verbose()) LOGGER.info("Number of " + attributeName + " entries in " + methodInfo + " is already as we want");
+            //if (SpecialSource.verbose()) LOGGER.info("Number of " + attributeName + " entries in " + methodInfo + " is already as we want");
             return annotations;
         } else {
-            if (SpecialSource.verbose()) LOGGER.warning("Unexpected number of " + attributeName + " entries in " + methodInfo + ": " + numAnnotations);
+            //if (SpecialSource.verbose()) LOGGER.warning("Unexpected number of " + attributeName + " entries in " + methodInfo + ": " + numAnnotations);
             return annotations;
         }
     }
