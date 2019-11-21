@@ -28,24 +28,27 @@
  */
 package net.md_5.specialsource;
 
-import net.md_5.specialsource.util.Pair;
-import net.md_5.specialsource.util.FileLocator;
-import net.md_5.specialsource.provider.JointProvider;
-import net.md_5.specialsource.provider.JarProvider;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import net.md_5.specialsource.provider.ClassLoaderProvider;
+import net.md_5.specialsource.provider.JarProvider;
+import net.md_5.specialsource.provider.JointProvider;
+import net.md_5.specialsource.util.FileLocator;
+import net.md_5.specialsource.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+
 import static java.util.Arrays.asList;
-import net.md_5.specialsource.provider.ClassLoaderProvider;
 
 public class SpecialSource {
 
@@ -56,6 +59,7 @@ public class SpecialSource {
     public static boolean kill_generics = false;
     public static String identifier = null;
     public static boolean stable = false;
+    private static Logger logger = LogManager.getLogger("Launcher");
 
     public static void main(String[] args) throws Exception {
         OptionParser parser = new OptionParser() {
@@ -319,7 +323,7 @@ public class SpecialSource {
 
     public static void log(String message) {
         if (options != null && !options.has("quiet")) {
-            System.out.println(message);
+            logger.info(message);
         }
     }
 
