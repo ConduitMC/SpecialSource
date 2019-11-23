@@ -51,7 +51,7 @@ public class ProgressMeter {
         int currentInterval = (int) (Math.floor(percent / printInterval));
 
         if (lastPrint < 0 || currentInterval > lastPrint) {
-            SpecialSource.log(String.format(progressFormat, percent));
+            System.out.println(String.format(progressFormat, percent));
             lastPrint = currentInterval;
         }
     }
