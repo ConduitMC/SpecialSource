@@ -270,6 +270,7 @@ public class JarRemapper extends CustomRemapper {
         ClassVisitor ca = node;
         ca = new RemappingClassAdapter(ca, this, repo);
         ca = new ParameterAnnotationFixer(ca);
+        ca = new RemoveLVTFixer(ca);
         reader.accept(ca, readerFlags);
 
         ClassWriter wr = new ClassWriter(writerFlags);
