@@ -132,6 +132,9 @@ public class ParameterAnnotationFixer extends ClassVisitor {
             //if (SpecialSource.verbose()) LOGGER.fine("  Not considering " + cls.name + " for extra parameter annotations as it is annonymous");
             return null; // It's an anonymous class
         }
+        if (info.outerName == null) {
+            return null;
+        }
         //if (SpecialSource.verbose()) LOGGER.fine("  Considering " + cls.name + " for extra parameter annotations as it is an inner class of " + info.outerName);
         return new Type[] { Type.getObjectType(info.outerName) };
     }
