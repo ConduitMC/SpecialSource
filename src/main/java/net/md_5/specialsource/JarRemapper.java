@@ -178,7 +178,7 @@ public class JarRemapper extends CustomRemapper {
         if (jar == null) {
             return;
         }
-        if (!target.getParentFile().exists()) {
+        if (target.getParentFile() != null && !target.getParentFile().exists()) {
             target.getParentFile().mkdirs();
         }
         ClassRepo repo = new JarRepo(jar);

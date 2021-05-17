@@ -10,9 +10,9 @@ repositories {
 }
 
 dependencies {
-    api "org.projectlombok:lombok:1.18.10"
-    annotationProcessor "org.projectlombok:lombok:1.18.10"
-    api "org.ow2.asm:asm-commons:7.1"
+    api "org.projectlombok:lombok:1.18.20"
+    annotationProcessor "org.projectlombok:lombok:1.18.20"
+    api "org.ow2.asm:asm-commons:9.1"
     api "net.sf.jopt-simple:jopt-simple:4.9"
     api "com.google.guava:guava:20.0"
     api "com.opencsv:opencsv:4.4"
