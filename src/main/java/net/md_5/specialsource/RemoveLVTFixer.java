@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
 public class RemoveLVTFixer extends ClassVisitor {
 
     RemoveLVTFixer(ClassVisitor cn) {
-        super(Opcodes.ASM6, cn);
+        super(Opcodes.ASM9, cn);
     }
 
     @Override

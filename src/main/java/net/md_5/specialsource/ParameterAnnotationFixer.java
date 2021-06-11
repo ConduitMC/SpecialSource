@@ -48,7 +48,7 @@ public class ParameterAnnotationFixer extends ClassVisitor {
     private static final Logger LOGGER = Logger.getLogger("MCInjector");
 
     ParameterAnnotationFixer(ClassVisitor cn) {
-        super(Opcodes.ASM6, cn);
+        super(Opcodes.ASM9, cn);
         // Extra version check, since these were added in ASM 6.1 and there
         // isn't a constant for it
         try {
