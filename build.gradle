@@ -16,6 +16,7 @@ dependencies {
     api "net.sf.jopt-simple:jopt-simple:4.9"
     api "com.google.guava:guava:20.0"
     api "com.opencsv:opencsv:4.4"
+    api "org.apache.logging.log4j:log4j-api:2.8.1"
 }
 
 group = theGroup

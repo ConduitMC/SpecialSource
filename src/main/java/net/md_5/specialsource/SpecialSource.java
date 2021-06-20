@@ -42,6 +42,8 @@ import com.google.common.collect.HashBiMap;
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 
 import static java.util.Arrays.asList;
@@ -56,6 +58,7 @@ public class SpecialSource {
     public static boolean kill_generics = false;
     public static String identifier = null;
     public static boolean stable = false;
+    public static Logger LOGGER = LogManager.getLogger("Launcher");
 
     public static void main(String[] args) throws Exception {
         OptionParser parser = new OptionParser() {
@@ -146,7 +149,7 @@ public class SpecialSource {
         try {
             options = parser.parse(args);
         } catch (OptionException ex) {
-            System.out.println(ex.getLocalizedMessage());
+			LOGGER.fatal(ex.getLocalizedMessage());
             System.exit(-1);
             return;
         }
@@ -155,7 +158,7 @@ public class SpecialSource {
             try {
                 parser.printHelpOn(System.err);
             } catch (IOException ex) {
-                System.out.println(ex.getLocalizedMessage());
+                LOGGER.fatal(ex.getLocalizedMessage());
             }
             System.exit(-1);
             return;
@@ -166,12 +169,12 @@ public class SpecialSource {
 
         if (options.has("version"))
         {
-            System.out.println("SpecialSource v{something}");
+            SpecialSource.LOGGER.info("SpecialSource v{something}");
             return;
         }
 
         if (options.has("in-jar") && !options.has("out-jar")) {
-            System.err.println("No output jar given, in-jar requires out-jar");
+            LOGGER.fatal("No output jar given, in-jar requires out-jar");
             parser.printHelpOn(System.err);
             System.exit(-1);
             return;
@@ -201,17 +204,17 @@ public class SpecialSource {
 
         if (options.has("first-jar") && options.has("second-jar")) {
             // Generate mappings from two otherwise-identical jars
-            log("Reading jars");
+            LOGGER.info("Reading jars");
             jar1 = Jar.init(FileLocator.getFile((String) options.valueOf("first-jar")));
             jar2 = Jar.init(FileLocator.getFile((String) options.valueOf("second-jar")));
 
             if (jar1.getMain() == null || jar2.getMain() == null) {
-                System.err.println("Jars for comparison must both define Main-Class manifest attribute");
+                LOGGER.fatal("Jars for comparison must both define Main-Class manifest attribute");
                 System.exit(-1);
                 return;
             }
 
-            log("Creating jar compare");
+            LOGGER.info("Creating jar compare");
             JarComparer visitor1 = new JarComparer(jar1);
             JarComparer visitor2 = new JarComparer(jar2);
             visit(new Pair<Jar>(jar1, jar2), new Pair<JarComparer>(visitor1, visitor2), new Pair<String>(jar1.getMain(), jar2.getMain()));
@@ -222,7 +225,7 @@ public class SpecialSource {
                 jarMapping.addExcludedPackage(pkg);
             }
         } else if (options.has("srg-in")) {
-            log("Loading mappings");
+            LOGGER.info("Loading mappings");
 
             jarMapping = new JarMapping();
             for (String pkg : excluded)
@@ -243,12 +246,12 @@ public class SpecialSource {
                 jarMapping.loadMappings(filename, reverse, numeric, inShadeRelocation, outShadeRelocation);
             }
         } else {
-            System.err.println("No mappings given, first-jar/second-jar or srg-in required");
+            LOGGER.fatal("No mappings given, first-jar/second-jar or srg-in required");
             parser.printHelpOn(System.err);
             System.exit(-1);
             return;
         }
-        log(jarMapping.packages.size() + " packages, " + jarMapping.classes.size() + " classes, " + jarMapping.fields.size() + " fields, " + jarMapping.methods.size() + " methods");
+        LOGGER.info(jarMapping.packages.size() + " packages, " + jarMapping.classes.size() + " classes, " + jarMapping.fields.size() + " fields, " + jarMapping.methods.size() + " methods");
 
         JointProvider inheritanceProviders = new JointProvider();
         jarMapping.setFallbackInheritanceProvider(inheritanceProviders);
@@ -265,7 +268,7 @@ public class SpecialSource {
             try (BufferedReader reader = new BufferedReader(new FileReader(inheritanceFile))) {
                 inheritanceMap.load(reader, inverseClassMap);
             }
-            log("Loaded inheritance map for " + inheritanceMap.size() + " classes");
+            LOGGER.info("Loaded inheritance map for " + inheritanceMap.size() + " classes");
 
             inheritanceProviders.add(inheritanceMap);
         }
@@ -290,7 +293,7 @@ public class SpecialSource {
 
             inheritanceProviders.add(new JarProvider(jar3));
 
-            log("Remapping final jar");
+            LOGGER.info("Remapping final jar");
             JarRemapper jarRemapper = new JarRemapper(null, jarMapping, accessMapper);
             jarRemapper.remapJar(jar3, (File) options.valueOf("out-jar"), new HashSet<String>((Collection<String>) options.valuesOf("only")));
         }
@@ -308,19 +311,13 @@ public class SpecialSource {
         if (access != null) {
             for (String entry : access.getMap().keySet()) {
                 if (!access.getAppliedMaps().contains(entry)) {
-                    System.out.println("[WARN] Access map not applied: " + entry);
+                    LOGGER.warn("Access map not applied: " + entry);
                 }
             }
         }
         if (jar1 != null) jar1.close();
         if (jar2 != null) jar2.close();
         if (jar3 != null) jar3.close();
-    }
-
-    public static void log(String message) {
-        if (options != null && !options.has("quiet")) {
-            System.out.println(message);
-        }
     }
 
     private static void visit(Pair<Jar> jars, Pair<JarComparer> visitors, Pair<String> classes) throws IOException {

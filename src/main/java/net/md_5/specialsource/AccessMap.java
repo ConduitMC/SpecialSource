@@ -146,7 +146,7 @@ public class AccessMap {
 
     public void addAccessChange(String key, AccessChange accessChange) {
         if (map.containsKey(key)) {
-            System.out.println("INFO: merging AccessMap " + key + " from " + map.get(key) + " with " + accessChange);
+            SpecialSource.LOGGER.info("Merging AccessMap " + key + " from " + map.get(key) + " with " + accessChange);
             map.get(key).merge(accessChange);
         } else {
             map.put(key, accessChange);

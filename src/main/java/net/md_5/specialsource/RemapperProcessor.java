@@ -281,13 +281,13 @@ public class RemapperProcessor {
 
     private void logI(String message) {
         if (debug) {
-            System.out.println("[Inheritance] " + message);
+            SpecialSource.LOGGER.debug("[Inheritance] " + message);
         }
     }
 
     private void logR(String message) {
         if (debug) {
-            System.out.println("[ReflectionRemapper] " + message);
+            SpecialSource.LOGGER.debug("[ReflectionRemapper] " + message);
         }
     }
 }

@@ -257,7 +257,7 @@ public class Jar implements Closeable {
                     main = newMain;
                 } else {
                     // Else warn that there are many main classes in the set we have been given
-                    System.err.println("[Warning] Duplicate Main classes for " + fileName);
+                    SpecialSource.LOGGER.warn("Duplicate Main classes for " + fileName);
                 }
             }
         }

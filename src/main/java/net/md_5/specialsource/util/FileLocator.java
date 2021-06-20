@@ -53,7 +53,7 @@ public class FileLocator {
         // Check cache for a hit
         if (file.exists() && useCache) {
             if (true || SpecialSource.verbose()) {
-                System.out.println("Using cached file " + file.getPath() + " for " + url);
+                SpecialSource.LOGGER.info("Using cached file " + file.getPath() + " for " + url);
             }
 
             return file;
@@ -61,7 +61,7 @@ public class FileLocator {
 
         // Nope, we need to download it ourselves
         if (true || SpecialSource.verbose()) {
-            System.out.println("Downloading " + url);
+            SpecialSource.LOGGER.info("Downloading " + url);
         }
 
         // TODO: Better solution for cleaning names - this extraneous '\' is introduced by path joining on the mcp dir
@@ -72,7 +72,7 @@ public class FileLocator {
 
         // Success!
         if (SpecialSource.verbose()) {
-            System.out.println("Downloaded to " + file.getPath());
+            SpecialSource.LOGGER.info("Downloaded to " + file.getPath());
         }
 
         return file;

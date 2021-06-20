@@ -41,17 +41,13 @@ public class ProgressMeter {
     public static double printInterval;
 
     public void makeProgress() {
-        if (!SpecialSource.verbose()) {
-            return;
-        }
-
         this.progress++;
 
         double percent = ((double) progress / (double) total) * 100.0;
         int currentInterval = (int) (Math.floor(percent / printInterval));
 
         if (lastPrint < 0 || currentInterval > lastPrint) {
-            System.out.println(String.format(progressFormat, percent));
+            SpecialSource.LOGGER.info(String.format(progressFormat, percent));
             lastPrint = currentInterval;
         }
     }

@@ -51,7 +51,7 @@ public class InheritanceMap implements InheritanceProvider {
             Collection<String> parents = inheritanceProvider.getParents(className);
 
             if (parents == null) {
-                System.out.println("No inheritance information found for " + className);
+                SpecialSource.LOGGER.info("No inheritance information found for " + className);
             } else {
                 ArrayList<String> filteredParents = new ArrayList<String>();
 

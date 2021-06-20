@@ -82,7 +82,7 @@ public class JarMapping {
      * applies before loading mappings, not after
      */
     public void addExcludedPackage(String packageName) {
-        SpecialSource.log("Protecting Package: " + packageName);
+        SpecialSource.LOGGER.info("Protecting Package: " + packageName);
         excludedPackages.add(packageName);
     }
 
@@ -528,7 +528,7 @@ public class JarMapping {
             }
 
             if (isExcludedPackage(oldClassName)) {
-                SpecialSource.log("Ignored CL: " + oldClassName + " " + newClassName);
+                SpecialSource.LOGGER.info("Ignored CL: " + oldClassName + " " + newClassName);
                 return;
             }
 
@@ -558,7 +558,7 @@ public class JarMapping {
             }
 
             if (isExcludedPackage(oldPackageName)) {
-                SpecialSource.log("Ignored PK: " + oldPackageName + " -> " + newPackageName);
+                SpecialSource.LOGGER.info("Ignored PK: " + oldPackageName + " -> " + newPackageName);
                 return;
             }
 
@@ -603,7 +603,7 @@ public class JarMapping {
             }
 
             if (isExcludedPackage(oldClassName)) {
-                SpecialSource.log("Ignored FD: " + oldClassName + "/" + oldFieldName + " -> " + newFieldName);
+                SpecialSource.LOGGER.info("Ignored FD: " + oldClassName + "/" + oldFieldName + " -> " + newFieldName);
                 return;
             }
 
@@ -644,7 +644,7 @@ public class JarMapping {
             }
 
             if (isExcludedPackage(oldClassName)) {
-                SpecialSource.log("Ignored MD: " + oldClassName + "/" + oldMethodName + " -> " + newMethodName);
+                SpecialSource.LOGGER.info("Ignored MD: " + oldClassName + "/" + oldMethodName + " -> " + newMethodName);
                 return;
             }
 
